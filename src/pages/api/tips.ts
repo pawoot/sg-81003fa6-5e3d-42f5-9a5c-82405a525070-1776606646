@@ -1,63 +1,49 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { supabase } from "@/integrations/supabase/client";
-import { createHash } from "crypto";
+import { sendAdminNotification } from "@/lib/notifications";
 
-/**
- * Simple encryption for contact info (basic obfuscation)
- * For production, use proper encryption library
- */
-function encryptContact(contact: string): string {
-  if (!contact) return "";
-  return createHash("sha256").update(contact + process.env.CONTACT_SALT || "policywatch-salt").digest("hex");
-}
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method === "POST") {
-    const {
-      policy_id,
-      description,
-      evidence_url,
-      location_province,
-      location_district,
-      submitter_contact,
-    } = req.body;
+  try {
+    const { policy_id, name, description } = req.body;
 
-    // Validation
     if (!policy_id || !description) {
-      return res.status(400).json({ error: "policy_id and description are required" });
+      return res.status(400).json({ error: "Missing required fields" });
     }
 
-    if (description.length < 20) {
-      return res.status(400).json({ error: "รายละเอียดเบาะแสต้องมีอย่างน้อย 20 ตัวอักษร" });
-    }
-
-    // Encrypt contact if provided
-    const encrypted_contact = submitter_contact ? encryptContact(submitter_contact) : null;
-
+    // Insert community tip
     const { data, error } = await supabase
       .from("community_tips")
       .insert({
         policy_id,
+        name: name || "ผู้ส่งข้อมูล",
         description,
-        evidence_url: evidence_url || null,
-        location_province: location_province || null,
-        location_district: location_district || null,
-        submitter_contact_encrypted: encrypted_contact,
-        status: "new",
+        status: "pending",
       })
-      .select()
+      .select("id, policies(title)")
       .single();
 
     if (error) {
-      console.error("Error creating tip:", error);
+      console.error("Error inserting tip:", error);
       return res.status(500).json({ error: "Failed to submit tip" });
     }
 
-    return res.status(201).json(data);
-  }
+    // Send email notification (non-blocking)
+    const policyTitle = (data.policies as any)?.title || "นโยบาย";
+    await sendAdminNotification({
+      type: "community_tip",
+      policy_title: policyTitle,
+      description,
+      submitter_name: name || "ผู้ส่งข้อมูล",
+      admin_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/admin/tips`,
+    });
 
-  return res.status(405).json({ error: "Method not allowed" });
+    res.status(200).json({ success: true, id: data.id });
+  } catch (error) {
+    console.error("Unexpected error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 }
