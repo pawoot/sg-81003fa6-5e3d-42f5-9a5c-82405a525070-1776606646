@@ -5,6 +5,7 @@ import { getAllPolicies } from "@/services/policyService";
 import type { PolicyWithDetails } from "@/lib/types";
 import { Plus, Edit, Trash2, Search } from "lucide-react";
 import Link from "next/link";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function AdminPoliciesPage() {
   const [policies, setPolicies] = useState<PolicyWithDetails[]>([]);
@@ -41,8 +42,18 @@ export default function AdminPoliciesPage() {
     }
 
     try {
+      // Get session token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        alert("Session หมดอายุ - กรุณา login ใหม่");
+        return;
+      }
+
       const response = await fetch(`/api/admin/policies?id=${policyId}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${session.access_token}`,
+        },
       });
 
       if (!response.ok) {
