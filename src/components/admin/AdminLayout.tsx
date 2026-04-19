@@ -10,11 +10,19 @@ import {
   LogOut,
   Menu,
   X,
-  TrendingUp
+  TrendingUp,
+  AlertCircle,
+  Bell
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
+}
+
+interface PendingCounts {
+  updates: number;
+  tips: number;
 }
 
 export function AdminLayout({ children }: AdminLayoutProps) {
@@ -22,6 +30,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [pendingCounts, setPendingCounts] = useState<PendingCounts>({ updates: 0, tips: 0 });
 
   useEffect(() => {
     async function checkAuth() {
@@ -43,6 +52,50 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     
     checkAuth();
   }, [router]);
+
+  useEffect(() => {
+    async function fetchPendingCounts() {
+      try {
+        const { count: updatesCount } = await supabase
+          .from("progress_updates")
+          .select("*", { count: "exact", head: true })
+          .eq("publish_status", "pending");
+
+        const { count: tipsCount } = await supabase
+          .from("community_tips")
+          .select("*", { count: "exact", head: true })
+          .eq("status", "pending");
+
+        setPendingCounts({
+          updates: updatesCount || 0,
+          tips: tipsCount || 0,
+        });
+      } catch (error) {
+        console.error("Error fetching pending counts:", error);
+      }
+    }
+
+    fetchPendingCounts();
+
+    // Subscribe to real-time changes
+    const channel = supabase
+      .channel("admin-pending-counts")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "progress_updates" },
+        () => fetchPendingCounts()
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "community_tips" },
+        () => fetchPendingCounts()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   async function handleSignOut() {
     try {

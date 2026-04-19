@@ -11,6 +11,7 @@ import {
   AlertCircle
 } from "lucide-react";
 import Link from "next/link";
+import { PendingNotifications } from "@/components/admin/PendingNotifications";
 
 interface DashboardStats {
   total: number;
@@ -97,6 +98,9 @@ export default function AdminDashboard() {
           <h1 className="font-heading font-bold text-3xl mb-2">Dashboard</h1>
           <p className="text-muted-foreground">ภาพรวมระบบติดตามนโยบาย</p>
         </div>
+
+        {/* Pending Notifications */}
+        <PendingNotifications />
 
         {/* Stats Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
