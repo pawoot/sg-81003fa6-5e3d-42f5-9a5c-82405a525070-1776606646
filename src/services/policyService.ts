@@ -1,61 +1,96 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { Policy, PolicyWithCluster, PolicyDetail, DashboardStats, Cluster } from "@/lib/types";
+import type { Policy, PolicyWithDetails, PolicyDetail } from "@/lib/types";
 
 /**
  * Fetch all policies with cluster info
  */
-export async function getAllPolicies(): Promise<PolicyWithCluster[]> {
+export async function getAllPolicies(): Promise<PolicyWithDetails[]> {
   const { data, error } = await supabase
     .from("policies")
-    .select("*, clusters(*)")
-    .order("policy_number", { ascending: true });
+    .select(`
+      *,
+      clusters (
+        id,
+        name,
+        short_name,
+        color_hex,
+        icon
+      ),
+      ministers (
+        id,
+        full_name,
+        title,
+        position
+      )
+    `)
+    .order("policy_number");
 
-  console.log("getAllPolicies:", { data, error });
-  
   if (error) {
     console.error("Error fetching policies:", error);
     return [];
   }
-  
+
   return data || [];
 }
 
 /**
- * Fetch all clusters
+ * Get policies by cluster
  */
-export async function getAllClusters(): Promise<Cluster[]> {
+export async function getPoliciesByCluster(clusterId: number): Promise<PolicyWithDetails[]> {
   const { data, error } = await supabase
-    .from("clusters")
-    .select("*")
-    .order("id", { ascending: true });
+    .from("policies")
+    .select(`
+      *,
+      clusters (
+        id,
+        name,
+        short_name,
+        color_hex,
+        icon
+      ),
+      ministers (
+        id,
+        full_name,
+        title,
+        position
+      )
+    `)
+    .eq("cluster_id", clusterId)
+    .order("policy_number");
 
-  console.log("getAllClusters:", { data, error });
-  
   if (error) {
-    console.error("Error fetching clusters:", error);
+    console.error("Error fetching policies by cluster:", error);
     return [];
   }
-  
+
   return data || [];
 }
 
 /**
  * Fetch featured policies (urgent + is_featured = true)
  */
-export async function getFeaturedPolicies(): Promise<PolicyWithCluster[]> {
+export async function getFeaturedPolicies(): Promise<PolicyWithDetails[]> {
   const { data, error } = await supabase
     .from("policies")
-    .select("*, clusters(*)")
+    .select(`
+      *,
+      clusters (
+        id,
+        name,
+        short_name,
+        color_hex,
+        icon
+      )
+    `)
     .eq("is_featured", true)
-    .order("priority", { ascending: false });
+    .order("priority", { ascending: false })
+    .limit(4);
 
-  console.log("getFeaturedPolicies:", { data, error });
-  
   if (error) {
     console.error("Error fetching featured policies:", error);
     return [];
   }
-  
+
   return data || [];
 }
 
@@ -67,64 +102,83 @@ export async function getPolicyBySlug(slug: string): Promise<PolicyDetail | null
     .from("policies")
     .select(`
       *,
-      clusters(*),
-      milestones(*),
-      budgets(*),
-      progress_updates(*)
+      clusters (
+        id,
+        name,
+        short_name,
+        color_hex,
+        icon
+      ),
+      ministers (
+        id,
+        full_name,
+        title,
+        position
+      ),
+      milestones (
+        id,
+        name,
+        milestone_order,
+        weight_percent,
+        status,
+        target_date,
+        completed_date,
+        notes
+      ),
+      progress_updates (
+        id,
+        update_type,
+        description,
+        old_status,
+        new_status,
+        evidence_urls,
+        data_source_type,
+        created_at
+      )
     `)
     .eq("slug", slug)
+    .eq("progress_updates.publish_status", "published")
+    .order("milestone_order", { foreignTable: "milestones" })
+    .order("created_at", { foreignTable: "progress_updates", ascending: false })
     .single();
 
-  console.log("getPolicyBySlug:", { data, error });
-  
   if (error) {
     console.error("Error fetching policy:", error);
     return null;
   }
-  
-  return data as PolicyDetail;
+
+  return data;
 }
 
 /**
  * Get dashboard statistics
  */
-export async function getDashboardStats(): Promise<DashboardStats> {
+export async function getDashboardStats() {
   const { data, error } = await supabase
     .from("policies")
     .select("status");
 
-  console.log("getDashboardStats:", { data, error });
-  
   if (error) {
     console.error("Error fetching stats:", error);
-    return { total: 0, in_progress: 0, completed: 0, delayed_or_planned: 0 };
+    return {
+      total: 0,
+      in_progress: 0,
+      completed: 0,
+      delayed_or_planned: 0,
+    };
   }
-  
-  const policies = data || [];
-  const total = policies.length;
-  const in_progress = policies.filter(p => p.status === "in_progress").length;
-  const completed = policies.filter(p => p.status === "completed").length;
-  const delayed_or_planned = policies.filter(p => p.status === "delayed" || p.status === "planned").length;
-  
-  return { total, in_progress, completed, delayed_or_planned };
-}
 
-/**
- * Get policies by cluster
- */
-export async function getPoliciesByCluster(clusterId: number): Promise<PolicyWithCluster[]> {
-  const { data, error } = await supabase
-    .from("policies")
-    .select("*, clusters(*)")
-    .eq("cluster_id", clusterId)
-    .order("priority", { ascending: false });
+  const total = data?.length || 0;
+  const in_progress = data?.filter(p => p.status === "in_progress").length || 0;
+  const completed = data?.filter(p => p.status === "completed").length || 0;
+  const delayed_or_planned = data?.filter(p => 
+    p.status === "delayed" || p.status === "planned"
+  ).length || 0;
 
-  console.log("getPoliciesByCluster:", { data, error });
-  
-  if (error) {
-    console.error("Error fetching policies by cluster:", error);
-    return [];
-  }
-  
-  return data || [];
+  return {
+    total,
+    in_progress,
+    completed,
+    delayed_or_planned,
+  };
 }
