@@ -10,6 +10,7 @@ import { MilestoneTimeline } from "@/components/policy/MilestoneTimeline";
 import { ActivityLog } from "@/components/policy/ActivityLog";
 import type { PolicyDetail, KPI } from "@/lib/types";
 import { ArrowLeft, Calendar, Target, TrendingUp } from "lucide-react";
+import Link from "next/link";
 
 const STATUS_CONFIG = {
   planned: { label: "วางแผน", color: "bg-blue-100 text-blue-800" },
@@ -60,9 +61,9 @@ export default function PolicyDetailPage() {
         <div className="min-h-screen bg-background py-12">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="font-heading font-bold text-4xl mb-4">ไม่พบนโยบาย</h1>
-            <a href="/policies" className="text-primary hover:underline">
+            <Link href="/policies" className="text-primary hover:underline">
               กลับไปหน้านโยบายทั้งหมด
-            </a>
+            </Link>
           </div>
         </div>
       </>
@@ -83,13 +84,13 @@ export default function PolicyDetailPage() {
       <main className="min-h-screen bg-background py-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back Button */}
-          <a
+          <Link
             href="/policies"
             className="inline-flex items-center gap-2 text-primary hover:underline mb-6"
           >
             <ArrowLeft className="w-4 h-4" />
             กลับไปหน้านโยบายทั้งหมด
-          </a>
+          </Link>
 
           {/* Hero Section */}
           <div className="bg-card border border-border rounded-lg p-8 mb-8">

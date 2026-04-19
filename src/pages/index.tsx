@@ -3,6 +3,8 @@ import { Navbar } from "@/components/Navbar";
 import { HeroStats } from "@/components/dashboard/HeroStats";
 import { ClusterOverview } from "@/components/dashboard/ClusterOverview";
 import { FeaturedPolicies } from "@/components/dashboard/FeaturedPolicies";
+import { TrendingUp, Target, CheckCircle } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -23,18 +25,18 @@ export default function Home() {
                 แบบเรียลไทม์ โปร่งใส ตรวจสอบได้
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
+                <Link
                   href="/policies"
                   className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors"
                 >
                   ดูนโยบายทั้งหมด
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/about"
                   className="inline-flex items-center justify-center px-8 py-3 bg-white border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary/5 transition-colors"
                 >
                   เกี่ยวกับโครงการ
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -66,6 +68,17 @@ export default function Home() {
             <FeaturedPolicies />
           </div>
         </section>
+
+        {/* Call to Action */}
+        <div className="text-center">
+          <Link
+            href="/policies"
+            className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-colors shadow-lg"
+          >
+            <Target className="w-5 h-5" />
+            ดูนโยบายทั้งหมด 23 ข้อ
+          </Link>
+        </div>
 
         {/* Footer */}
         <footer className="bg-muted/30 border-t border-border py-8">
