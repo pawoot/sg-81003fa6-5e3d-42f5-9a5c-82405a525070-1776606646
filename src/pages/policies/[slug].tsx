@@ -8,6 +8,7 @@ import { CountdownTimer } from "@/components/dashboard/CountdownTimer";
 import { Progress } from "@/components/ui/progress";
 import { MilestoneTimeline } from "@/components/policy/MilestoneTimeline";
 import { ActivityLog } from "@/components/policy/ActivityLog";
+import { PublicVote } from "@/components/policy/PublicVote";
 import type { PolicyDetail, KPI } from "@/lib/types";
 import { ArrowLeft, Calendar, Target, TrendingUp } from "lucide-react";
 import Link from "next/link";
@@ -175,45 +176,85 @@ export default function PolicyDetailPage() {
             </div>
           </div>
 
-          {/* KPIs */}
-          {kpis.length > 0 && (
-            <div className="bg-card border border-border rounded-lg p-6 mb-8">
-              <h2 className="font-heading font-bold text-2xl mb-4">ตัวชี้วัด (KPIs)</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {kpis.map((kpi, idx) => (
-                  <div key={idx} className="border border-border rounded-lg p-4">
-                    <div className="font-semibold text-foreground mb-2">{kpi.metric}</div>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <div className="text-muted-foreground">เป้าหมาย</div>
-                        <div className="font-medium">{kpi.target} {kpi.unit}</div>
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Left Column - Main Info */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* KPIs Section */}
+              {kpis.length > 0 && (
+                <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+                  <h2 className="font-heading font-semibold text-xl mb-4 flex items-center gap-2">
+                    <Target className="w-5 h-5 text-primary" />
+                    ตัวชี้วัดความสำเร็จ (KPIs)
+                  </h2>
+                  <div className="space-y-4">
+                    {kpis.map((kpi, index) => (
+                      <div key={index} className="border-l-4 border-primary pl-4">
+                        <div className="font-medium text-foreground">{kpi.metric}</div>
+                        <div className="text-sm text-muted-foreground mt-1">
+                          เป้าหมาย: <span className="font-semibold text-foreground">{kpi.target}</span>
+                          {kpi.unit && ` ${kpi.unit}`}
+                          {kpi.current && (
+                            <> • ปัจจุบัน: <span className="font-semibold text-primary">{kpi.current}</span></>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <div className="text-muted-foreground">ปัจจุบัน</div>
-                        <div className="font-medium">{kpi.current} {kpi.unit}</div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+              )}
+
+              {/* Milestones */}
+              {policy.milestones && policy.milestones.length > 0 && (
+                <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+                  <h2 className="font-heading font-semibold text-xl mb-6">ไทม์ไลน์และขั้นตอน</h2>
+                  <MilestoneTimeline milestones={policy.milestones} />
+                </div>
+              )}
+
+              {/* Activity Log */}
+              {policy.progress_updates && policy.progress_updates.length > 0 && (
+                <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+                  <h2 className="font-heading font-semibold text-xl mb-6 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-primary" />
+                    บันทึกความก้าวหน้า
+                  </h2>
+                  <ActivityLog updates={policy.progress_updates} />
+                </div>
+              )}
+            </div>
+
+            {/* Right Column - Sidebar */}
+            <div className="space-y-6">
+              {/* Public Vote Component */}
+              <PublicVote policyId={policy.id} />
+
+              {/* Info Box */}
+              <div className="bg-muted/50 rounded-lg p-6">
+                <h3 className="font-heading font-semibold mb-4">ข้อมูลนโยบาย</h3>
+                <div className="space-y-3 text-sm">
+                  <div>
+                    <div className="text-muted-foreground">หมายเลขนโยบาย</div>
+                    <div className="font-semibold">{policy.policy_number}</div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground">กลุ่มยุทธศาสตร์</div>
+                    <div className="font-semibold">{policy.cluster?.name || "-"}</div>
+                  </div>
+                  <div>
+                    <div className="text-muted-foreground">ความสำคัญ</div>
+                    <div className="font-semibold capitalize">{PRIORITY_LABELS[policy.priority] || policy.priority}</div>
+                  </div>
+                  {policy.target_date && (
+                    <div>
+                      <div className="text-muted-foreground">กำหนดเสร็จ</div>
+                      <div className="font-semibold">{toThaiDate(new Date(policy.target_date))}</div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          )}
-
-          {/* Milestones */}
-          {policy.milestones && policy.milestones.length > 0 && (
-            <div className="bg-card border border-border rounded-lg p-6 mb-8">
-              <h2 className="font-heading font-bold text-2xl mb-6">Milestones</h2>
-              <MilestoneTimeline milestones={policy.milestones} />
-            </div>
-          )}
-
-          {/* Activity Log */}
-          {policy.progress_updates && policy.progress_updates.length > 0 && (
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="font-heading font-bold text-2xl mb-6">ประวัติความคืบหน้า</h2>
-              <ActivityLog updates={policy.progress_updates} />
-            </div>
-          )}
+          </div>
         </div>
       </main>
     </>
