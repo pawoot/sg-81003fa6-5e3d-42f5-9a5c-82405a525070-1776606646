@@ -52,7 +52,7 @@ export default function Home() {
         {/* Clusters Overview */}
         <section className="py-16 bg-muted/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-8 text-center" style={{ color: "#f97316", backgroundColor: "#f3f4f6", backgroundImage: "none", fontSize: "56px" }}>
+            <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-8 text-center" style={{ color: "#f97316", backgroundColor: "#f3f4f6", backgroundImage: "none", fontSize: "48px" }}>
               5 กลุ่มยุทธศาสตร์
             </h2>
             <ClusterOverview />
@@ -62,7 +62,7 @@ export default function Home() {
         {/* Featured Policies */}
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-8 text-center" style={{ color: "#f97316", backgroundColor: "#f3f4f6", backgroundImage: "none", fontSize: "56px" }}>
+            <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-8 text-center" style={{ color: "#f97316", backgroundColor: "#f3f4f6", backgroundImage: "none", fontSize: "48px" }}>
               นโยบายด่วนที่ต้องจับตา
             </h2>
             <FeaturedPolicies />
