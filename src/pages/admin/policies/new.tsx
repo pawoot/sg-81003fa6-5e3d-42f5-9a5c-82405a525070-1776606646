@@ -61,6 +61,12 @@ export default function NewPolicyPage() {
     setError(null);
 
     try {
+      // Get session token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        throw new Error("No active session - please login again");
+      }
+
       // Generate slug
       const slug = generateSlug(formData.title);
 
@@ -78,7 +84,10 @@ export default function NewPolicyPage() {
 
       const response = await fetch("/api/admin/policies", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify({
           policy: policyData,
           milestones: validMilestones,

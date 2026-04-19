@@ -1,10 +1,35 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { supabase } from "@/integrations/supabase/client";
+import { createClient } from "@supabase/supabase-js";
+
+// Create authenticated Supabase client with session from request
+function getAuthenticatedClient(req: NextApiRequest) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  
+  const client = createClient(supabaseUrl, supabaseAnonKey);
+  
+  // Get session token from Authorization header
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const token = authHeader.substring(7);
+    client.auth.setSession({ access_token: token, refresh_token: "" });
+  }
+  
+  return client;
+}
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const supabase = getAuthenticatedClient(req);
+  
+  // Verify authentication
+  const { data: { session }, error: authError } = await supabase.auth.getSession();
+  if (authError || !session) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   // CREATE
   if (req.method === "POST") {
     const { policy, milestones } = req.body;
