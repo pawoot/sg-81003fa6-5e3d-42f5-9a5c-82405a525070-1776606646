@@ -20,7 +20,7 @@ export function FeaturedPolicies() {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {[1, 2, 3, 4].map((i) =>
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) =>
         <div key={i} className="bg-card border border-border rounded-lg p-6 animate-pulse">
             <div className="h-6 w-20 bg-muted rounded mb-3"></div>
             <div className="h-6 w-3/4 bg-muted rounded mb-2"></div>

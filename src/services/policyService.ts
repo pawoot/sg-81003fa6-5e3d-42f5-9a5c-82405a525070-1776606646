@@ -57,7 +57,7 @@ export async function getFeaturedPolicies(): Promise<PolicyWithDetails[]> {
     `)
     .eq("is_featured", true)
     .order("priority", { ascending: false })
-    .limit(4);
+    .limit(10);
 
   if (error) {
     console.error("Error fetching featured policies:", error);
