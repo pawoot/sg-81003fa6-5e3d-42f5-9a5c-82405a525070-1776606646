@@ -35,6 +35,29 @@ export default function AdminPoliciesPage() {
     cancelled: "ยกเลิก",
   };
 
+  const handleDelete = async (policyId: string, policyTitle: string) => {
+    if (!confirm(`คุณแน่ใจหรือไม่ที่จะลบนโยบาย "${policyTitle}"?\n\nการลบจะลบข้อมูลที่เกี่ยวข้องทั้งหมด (milestones, updates, votes)`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/policies?id=${policyId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete policy");
+      }
+
+      // Reload policies
+      const data = await getAllPolicies();
+      setPolicies(data);
+    } catch (err) {
+      alert("เกิดข้อผิดพลาดในการลบนโยบาย");
+      console.error(err);
+    }
+  };
+
   return (
     <AdminLayout>
       <SEO 
@@ -150,6 +173,7 @@ export default function AdminPoliciesPage() {
                             <Edit className="w-5 h-5" />
                           </Link>
                           <button
+                            onClick={() => handleDelete(policy.id, policy.title)}
                             className="p-2 hover:bg-destructive/10 text-destructive rounded-lg transition-colors"
                             title="ลบ"
                           >
