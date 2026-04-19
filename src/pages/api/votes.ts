@@ -58,7 +58,8 @@ export default async function handler(
 
   if (req.method === "GET") {
     // Get vote counts for a policy
-    const { policy_id } = req.query;
+    const queryPolicyId = req.query.policy_id;
+    const policy_id = Array.isArray(queryPolicyId) ? queryPolicyId[0] : queryPolicyId;
 
     if (!policy_id) {
       return res.status(400).json({ error: "Missing policy_id" });
