@@ -17,8 +17,8 @@ export default function Home() {
         <section className="bg-gradient-to-br from-primary/10 via-background to-accent/5 py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto">
-              <h1 className="font-heading font-bold text-5xl md:text-6xl lg:text-7xl text-foreground mb-6">
-                พูดแล้วทำ
+              <h1 className="font-heading font-bold text-5xl md:text-6xl lg:text-7xl text-foreground mb-6" style={{ lineHeight: "1", fontSize: "56px", color: "#3b82f6" }}>ติตตามนโยบายรัฐบาลอนุทิน 2
+
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground mb-8">
                 ติดตามความคืบหน้านโยบาย 23 ข้อของรัฐบาลอนุทิน ชาญวีรกูล<br />
@@ -27,14 +27,14 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/policies"
-                  className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors"
-                >
+                  className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors">
+                  
                   ดูนโยบายทั้งหมด
                 </Link>
                 <Link
                   href="/about"
-                  className="inline-flex items-center justify-center px-8 py-3 bg-white border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary/5 transition-colors"
-                >
+                  className="inline-flex items-center justify-center px-8 py-3 bg-white border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary/5 transition-colors">
+                  
                   เกี่ยวกับโครงการ
                 </Link>
               </div>
@@ -73,8 +73,8 @@ export default function Home() {
         <div className="text-center">
           <Link
             href="/policies"
-            className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-colors shadow-lg"
-          >
+            className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-colors shadow-lg">
+            
             <Target className="w-5 h-5" />
             ดูนโยบายทั้งหมด 23 ข้อ
           </Link>
@@ -97,6 +97,6 @@ export default function Home() {
           </div>
         </footer>
       </main>
-    </>
-  );
+    </>);
+
 }
