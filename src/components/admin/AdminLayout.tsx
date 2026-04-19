@@ -9,7 +9,8 @@ import {
   MessageSquare, 
   LogOut,
   Menu,
-  X
+  X,
+  TrendingUp
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -18,8 +19,8 @@ interface AdminLayoutProps {
 
 export function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-  const [userEmail, setUserEmail] = useState<string>("");
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -32,8 +33,8 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           return;
         }
         
-        setUserEmail(session.user.email || "");
-        setIsLoading(false);
+        setUser(session.user);
+        setLoading(false);
       } catch (error) {
         console.error("Auth check failed:", error);
         router.push("/admin/login");
@@ -53,13 +54,13 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   const navItems = [
-    { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+    { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/policies", label: "จัดการนโยบาย", icon: FileText },
-    { href: "/admin/updates", label: "รีวิวอัปเดต", icon: CheckSquare },
+    { href: "/admin/updates", label: "รีวิวอัปเดต", icon: TrendingUp },
     { href: "/admin/tips", label: "เบาะแสประชาชน", icon: MessageSquare },
   ];
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -104,9 +105,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           <nav className="p-4 space-y-2">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = item.exact
-                ? router.pathname === item.href
-                : router.pathname.startsWith(item.href);
+              const isActive = router.pathname === item.href;
 
               return (
                 <Link
@@ -130,7 +129,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
           <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border">
             <div className="mb-3 px-4">
-              <p className="text-sm font-medium text-foreground truncate">{userEmail}</p>
+              <p className="text-sm font-medium text-foreground truncate">{user.email}</p>
               <p className="text-xs text-muted-foreground">ผู้ดูแลระบบ</p>
             </div>
             <button

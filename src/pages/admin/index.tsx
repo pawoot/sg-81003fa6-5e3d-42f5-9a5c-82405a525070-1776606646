@@ -76,18 +76,18 @@ export default function AdminDashboardPage() {
 
   const actionCards = [
     {
-      label: "อัปเดตรอการอนุมัติ",
-      value: pendingUpdates,
-      icon: AlertCircle,
+      label: "อัปเดตรอตรวจสอบ",
+      value: stats.pending_updates,
+      color: "bg-amber-600",
+      icon: TrendingUp,
       href: "/admin/updates",
-      color: "bg-purple-500",
     },
     {
-      label: "เบาะแสจากประชาชน",
-      value: pendingTips,
+      label: "เบาะแสรอรีวิว",
+      value: stats.pending_tips,
+      color: "bg-blue-600",
       icon: MessageSquare,
       href: "/admin/tips",
-      color: "bg-cyan-500",
     },
   ];
 
