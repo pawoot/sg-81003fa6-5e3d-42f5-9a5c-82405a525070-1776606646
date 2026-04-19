@@ -6,14 +6,16 @@ function getAuthenticatedClient(req: NextApiRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
   
-  const client = createClient(supabaseUrl, supabaseAnonKey);
-  
   // Get session token from Authorization header
   const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith("Bearer ")) {
-    const token = authHeader.substring(7);
-    client.auth.setSession({ access_token: token, refresh_token: "" });
-  }
+  const token = authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : null;
+  
+  // Create client with auth header
+  const client = createClient(supabaseUrl, supabaseAnonKey, {
+    global: {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    },
+  });
   
   return client;
 }
@@ -24,9 +26,10 @@ export default async function handler(
 ) {
   const supabase = getAuthenticatedClient(req);
   
-  // Verify authentication
-  const { data: { session }, error: authError } = await supabase.auth.getSession();
-  if (authError || !session) {
+  // Verify authentication using getUser (validates JWT token directly)
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
+    console.error("Auth error:", authError);
     return res.status(401).json({ error: "Unauthorized" });
   }
 
