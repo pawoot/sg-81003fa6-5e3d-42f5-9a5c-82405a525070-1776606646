@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { SEO } from "@/components/SEO";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { getDashboardStats } from "@/services/policyService";
-import { supabase } from "@/integrations/supabase/client";
 import { 
   FileText, 
   TrendingUp, 
@@ -13,38 +12,33 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export default function AdminDashboardPage() {
-  const [stats, setStats] = useState({
+interface DashboardStats {
+  total: number;
+  in_progress: number;
+  completed: number;
+  delayed_or_planned: number;
+  pending_updates: number;
+  pending_tips: number;
+}
+
+export default function AdminDashboard() {
+  const [stats, setStats] = useState<DashboardStats>({
     total: 0,
     in_progress: 0,
     completed: 0,
     delayed_or_planned: 0,
+    pending_updates: 0,
+    pending_tips: 0,
   });
-  const [pendingUpdates, setPendingUpdates] = useState(0);
-  const [pendingTips, setPendingTips] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadData() {
-      // Policy stats
-      const policyStats = await getDashboardStats();
-      setStats(policyStats);
-
-      // Pending updates count
-      const { count: updatesCount } = await supabase
-        .from("progress_updates")
-        .select("*", { count: "exact", head: true })
-        .eq("publish_status", "under_review");
-      setPendingUpdates(updatesCount || 0);
-
-      // Pending tips count
-      const { count: tipsCount } = await supabase
-        .from("community_tips")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "new");
-      setPendingTips(tipsCount || 0);
+    async function loadStats() {
+      const data = await getDashboardStats();
+      setStats(data);
+      setLoading(false);
     }
-
-    loadData();
+    loadStats();
   }, []);
 
   const statCards = [
