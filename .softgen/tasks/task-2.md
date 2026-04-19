@@ -1,6 +1,6 @@
 ---
 title: Homepage Dashboard
-status: todo
+status: done
 priority: urgent
 type: feature
 tags: [dashboard, stats]
