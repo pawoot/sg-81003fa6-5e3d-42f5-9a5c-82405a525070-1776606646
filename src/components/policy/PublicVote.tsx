@@ -179,7 +179,7 @@ export function PublicVote({ policyId }: PublicVoteProps) {
       <div className="mt-4 pt-4 border-t border-border text-sm text-muted-foreground text-center">
         ยอดรวม {counts.total.toLocaleString("th-TH")} โหวต
         <span className="block text-xs mt-1">
-          (1 โหวตต่อ IP ต่อนโยบาย)
+          (1 โหวตต่อ IP ต่อนโยบายต่อวัน)
         </span>
       </div>
     </div>
