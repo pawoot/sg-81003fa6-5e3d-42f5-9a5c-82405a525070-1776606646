@@ -14,7 +14,7 @@ export default function Home() {
       
       <main className="min-h-screen">
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-primary/10 via-background to-accent/5 py-20" style={{ backgroundImage: "url(\"/sapa-07.jpg\")", backgroundColor: "transparent" }}>
+        <section className="bg-gradient-to-br from-primary/10 via-background to-accent/5 py-20" style={{ backgroundImage: "url(\"/sapa-07.jpg\")", backgroundColor: "transparent", opacity: "0.8" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto">
               <h1 className="font-heading font-bold text-5xl md:text-6xl lg:text-7xl text-foreground mb-6" style={{ lineHeight: "1", fontSize: "56px", color: "#ffffff" }}>ติตตามนโยบายรัฐบาลอนุทิน 2
@@ -43,7 +43,7 @@ export default function Home() {
         </section>
 
         {/* Stats Section */}
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-white" style={{ margin: "20px 0px" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <HeroStats />
           </div>
