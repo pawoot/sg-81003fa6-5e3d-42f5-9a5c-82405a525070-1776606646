@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { signIn } from "@/lib/auth";
 import { LogIn, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -109,9 +110,9 @@ export default function AdminLoginPage() {
             </form>
 
             <div className="mt-6 pt-6 border-t border-border text-center">
-              <a href="/" className="text-sm text-primary hover:underline">
+              <Link href="/" className="text-sm text-primary hover:underline">
                 ← กลับไปหน้าหลัก
-              </a>
+              </Link>
             </div>
           </div>
 

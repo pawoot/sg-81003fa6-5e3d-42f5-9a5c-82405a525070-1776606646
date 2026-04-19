@@ -11,6 +11,7 @@ import {
   MessageSquare,
   AlertCircle
 } from "lucide-react";
+import Link from "next/link";
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState({
@@ -131,7 +132,7 @@ export default function AdminDashboardPage() {
             {actionCards.map((item) => {
               const Icon = item.icon;
               return (
-                <a
+                <Link
                   key={item.label}
                   href={item.href}
                   className="bg-card rounded-xl p-6 border border-border shadow-sm hover:shadow-md transition-shadow group"
@@ -152,7 +153,7 @@ export default function AdminDashboardPage() {
                   <p className="text-sm text-muted-foreground mt-1">
                     {item.value === 0 ? "ไม่มีรายการใหม่" : `${item.value} รายการรอตรวจสอบ`}
                   </p>
-                </a>
+                </Link>
               );
             })}
           </div>
@@ -162,21 +163,22 @@ export default function AdminDashboardPage() {
         <div>
           <h2 className="font-heading font-semibold text-xl mb-4">เครื่องมือ</h2>
           <div className="grid sm:grid-cols-3 gap-4">
-            <a
+            <Link
               href="/admin/policies/new"
               className="bg-primary text-white rounded-lg p-4 hover:bg-primary/90 transition-colors text-center font-semibold"
             >
               + เพิ่มนโยบายใหม่
-            </a>
-            <a
+            </Link>
+            <Link
               href="/admin/policies"
               className="bg-card border border-border rounded-lg p-4 hover:bg-muted transition-colors text-center font-semibold"
             >
               จัดการนโยบาย
-            </a>
+            </Link>
             <a
               href="/"
               target="_blank"
+              rel="noopener noreferrer"
               className="bg-card border border-border rounded-lg p-4 hover:bg-muted transition-colors text-center font-semibold"
             >
               ดูหน้าเว็บไซต์ →
