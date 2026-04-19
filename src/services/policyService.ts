@@ -9,19 +9,8 @@ export async function getAllPolicies(): Promise<PolicyWithDetails[]> {
     .from("policies")
     .select(`
       *,
-      clusters (
-        id,
-        name,
-        short_name,
-        color_hex,
-        icon
-      ),
-      ministers (
-        id,
-        full_name,
-        title,
-        position
-      )
+      clusters (*),
+      ministers (*)
     `)
     .order("policy_number");
 
@@ -30,7 +19,7 @@ export async function getAllPolicies(): Promise<PolicyWithDetails[]> {
     return [];
   }
 
-  return data || [];
+  return (data || []) as unknown as PolicyWithDetails[];
 }
 
 /**
@@ -41,19 +30,8 @@ export async function getPoliciesByCluster(clusterId: number): Promise<PolicyWit
     .from("policies")
     .select(`
       *,
-      clusters (
-        id,
-        name,
-        short_name,
-        color_hex,
-        icon
-      ),
-      ministers (
-        id,
-        full_name,
-        title,
-        position
-      )
+      clusters (*),
+      ministers (*)
     `)
     .eq("cluster_id", clusterId)
     .order("policy_number");
@@ -63,7 +41,7 @@ export async function getPoliciesByCluster(clusterId: number): Promise<PolicyWit
     return [];
   }
 
-  return data || [];
+  return (data || []) as unknown as PolicyWithDetails[];
 }
 
 /**
@@ -74,13 +52,8 @@ export async function getFeaturedPolicies(): Promise<PolicyWithDetails[]> {
     .from("policies")
     .select(`
       *,
-      clusters (
-        id,
-        name,
-        short_name,
-        color_hex,
-        icon
-      )
+      clusters (*),
+      ministers (*)
     `)
     .eq("is_featured", true)
     .order("priority", { ascending: false })
@@ -91,7 +64,7 @@ export async function getFeaturedPolicies(): Promise<PolicyWithDetails[]> {
     return [];
   }
 
-  return data || [];
+  return (data || []) as unknown as PolicyWithDetails[];
 }
 
 /**
