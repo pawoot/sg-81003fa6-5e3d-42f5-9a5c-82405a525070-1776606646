@@ -140,6 +140,16 @@ export async function getDashboardStats() {
     .from("policies")
     .select("status");
 
+  const { count: pendingUpdates } = await supabase
+    .from("progress_updates")
+    .select("*", { count: "exact", head: true })
+    .in("publish_status", ["draft", "under_review"]);
+
+  const { count: pendingTips } = await supabase
+    .from("community_tips")
+    .select("*", { count: "exact", head: true })
+    .in("status", ["new", "under_review"]);
+
   if (error) {
     console.error("Error fetching stats:", error);
     return {
@@ -147,6 +157,8 @@ export async function getDashboardStats() {
       in_progress: 0,
       completed: 0,
       delayed_or_planned: 0,
+      pending_updates: 0,
+      pending_tips: 0,
     };
   }
 
@@ -162,5 +174,7 @@ export async function getDashboardStats() {
     in_progress,
     completed,
     delayed_or_planned,
+    pending_updates: pendingUpdates || 0,
+    pending_tips: pendingTips || 0,
   };
 }
