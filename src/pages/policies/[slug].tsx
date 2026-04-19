@@ -21,6 +21,12 @@ const STATUS_CONFIG = {
   cancelled: { label: "ยกเลิก", color: "bg-gray-100 text-gray-600" },
 };
 
+const PRIORITY_LABELS: Record<string, string> = {
+  urgent: "ด่วนที่สุด",
+  high: "สำคัญมาก",
+  normal: "ปกติ",
+};
+
 export default function PolicyDetailPage() {
   const router = useRouter();
   const { slug } = router.query;
@@ -239,7 +245,7 @@ export default function PolicyDetailPage() {
                   </div>
                   <div>
                     <div className="text-muted-foreground">กลุ่มยุทธศาสตร์</div>
-                    <div className="font-semibold">{policy.cluster?.name || "-"}</div>
+                    <div className="font-semibold">{policy.clusters?.name || "-"}</div>
                   </div>
                   <div>
                     <div className="text-muted-foreground">ความสำคัญ</div>
