@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { SEO } from "@/components/SEO";
 import { Navbar } from "@/components/Navbar";
-import { getAllPolicies, getAllClusters } from "@/services/policyService";
+import { getAllPolicies } from "@/services/policyService";
+import { getAllClusters } from "@/services/clusterService";
 import { PolicyCard } from "@/components/policy/PolicyCard";
 import type { PolicyWithCluster, Cluster } from "@/lib/types";
 import { Search, Filter } from "lucide-react";

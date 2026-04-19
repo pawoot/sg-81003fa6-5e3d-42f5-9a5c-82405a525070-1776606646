@@ -134,7 +134,8 @@ export async function getPolicyBySlug(slug: string): Promise<PolicyDetail | null
         evidence_urls,
         data_source_type,
         created_at
-      )
+      ),
+      budgets (*)
     `)
     .eq("slug", slug)
     .eq("progress_updates.publish_status", "published")
@@ -147,7 +148,15 @@ export async function getPolicyBySlug(slug: string): Promise<PolicyDetail | null
     return null;
   }
 
-  return data;
+  // Ensure related data are correctly typed as arrays
+  const policyDetail: PolicyDetail = {
+    ...(data as any),
+    milestones: Array.isArray(data.milestones) ? data.milestones : [],
+    progress_updates: Array.isArray(data.progress_updates) ? data.progress_updates : [],
+    budgets: Array.isArray(data.budgets) ? data.budgets : [],
+  };
+
+  return policyDetail;
 }
 
 /**

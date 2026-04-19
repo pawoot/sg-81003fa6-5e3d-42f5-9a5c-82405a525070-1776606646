@@ -16,8 +16,14 @@ export interface PolicyWithCluster extends Policy {
   clusters: Cluster | null;
 }
 
+export interface PolicyWithDetails extends Policy {
+  clusters: Cluster | null;
+  ministers: Minister | null;
+}
+
 export interface PolicyDetail extends Policy {
   clusters: Cluster | null;
+  ministers: Minister | null;
   milestones: Milestone[];
   budgets: Budget[];
   progress_updates: ProgressUpdate[];
