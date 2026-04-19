@@ -1,5 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { Policy, PolicyWithCluster, PolicyDetail, DashboardStats } from "@/lib/types";
+import type { Policy, PolicyWithCluster, PolicyDetail, DashboardStats, Cluster } from "@/lib/types";
 
 /**
  * Fetch all policies with cluster info
@@ -14,6 +14,25 @@ export async function getAllPolicies(): Promise<PolicyWithCluster[]> {
   
   if (error) {
     console.error("Error fetching policies:", error);
+    return [];
+  }
+  
+  return data || [];
+}
+
+/**
+ * Fetch all clusters
+ */
+export async function getAllClusters(): Promise<Cluster[]> {
+  const { data, error } = await supabase
+    .from("clusters")
+    .select("*")
+    .order("id", { ascending: true });
+
+  console.log("getAllClusters:", { data, error });
+  
+  if (error) {
+    console.error("Error fetching clusters:", error);
     return [];
   }
   
