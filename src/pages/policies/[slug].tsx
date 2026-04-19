@@ -8,7 +8,7 @@ import { CountdownTimer } from "@/components/dashboard/CountdownTimer";
 import { Progress } from "@/components/ui/progress";
 import { MilestoneTimeline } from "@/components/policy/MilestoneTimeline";
 import { ActivityLog } from "@/components/policy/ActivityLog";
-import type { PolicyDetail } from "@/lib/types";
+import type { PolicyDetail, KPI } from "@/lib/types";
 import { ArrowLeft, Calendar, Target, TrendingUp } from "lucide-react";
 
 const STATUS_CONFIG = {
@@ -70,7 +70,7 @@ export default function PolicyDetailPage() {
   }
 
   const statusConfig = STATUS_CONFIG[policy.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG.planned;
-  const kpis = Array.isArray(policy.kpis) ? policy.kpis : [];
+  const kpis = (Array.isArray(policy.kpis) ? policy.kpis : []) as unknown as KPI[];
 
   return (
     <>
