@@ -22,13 +22,13 @@ export function PendingNotifications() {
         const { count: updatesCount } = await supabase
           .from("progress_updates")
           .select("*", { count: "exact", head: true })
-          .eq("publish_status", "pending");
+          .eq("publish_status", "draft");
 
         // Count pending community tips
         const { count: tipsCount } = await supabase
           .from("community_tips")
           .select("*", { count: "exact", head: true })
-          .eq("status", "pending");
+          .eq("status", "new");
 
         const updates = updatesCount || 0;
         const tips = tipsCount || 0;

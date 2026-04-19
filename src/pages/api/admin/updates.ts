@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             policy_number
           )
         `)
-        .eq("publish_status", "pending")
+        .eq("publish_status", "draft")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -48,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           description,
           evidence_urls: evidence_urls || [],
           data_source_type: data_source_type || "manual",
-          publish_status: "pending",
+          publish_status: "draft",
         })
         .select("id, policies(title)")
         .single();

@@ -60,12 +60,12 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         const { count: updatesCount } = await supabase
           .from("progress_updates")
           .select("*", { count: "exact", head: true })
-          .eq("publish_status", "pending");
+          .eq("publish_status", "draft");
 
         const { count: tipsCount } = await supabase
           .from("community_tips")
           .select("*", { count: "exact", head: true })
-          .eq("status", "pending");
+          .eq("status", "new");
 
         setPendingCounts({
           updates: updatesCount || 0,

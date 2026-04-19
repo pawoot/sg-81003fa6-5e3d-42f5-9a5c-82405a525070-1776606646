@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { policy_id, name, description } = req.body;
+    const { policy_id, description } = req.body;
 
     if (!policy_id || !description) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -19,9 +19,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .from("community_tips")
       .insert({
         policy_id,
-        name: name || "ผู้ส่งข้อมูล",
         description,
-        status: "pending",
+        status: "new",
       })
       .select("id, policies(title)")
       .single();
@@ -37,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       type: "community_tip",
       policy_title: policyTitle,
       description,
-      submitter_name: name || "ผู้ส่งข้อมูล",
+      submitter_name: "ประชาชน",
       admin_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/admin/tips`,
     });
 
