@@ -9,6 +9,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        heading: ["Noto Sans Thai", "sans-serif"],
+        sans: ["IBM Plex Sans Thai", "system-ui", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -54,11 +58,6 @@ const config: Config = {
           4: "hsl(var(--cluster-4))",
           5: "hsl(var(--cluster-5))",
         },
-      },
-      fontFamily: {
-        heading: ["Sarabun", "system-ui", "sans-serif"],
-        body: ["IBM Plex Sans Thai", "system-ui", "sans-serif"],
-        sans: ["IBM Plex Sans Thai", "system-ui", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
