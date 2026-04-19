@@ -6,11 +6,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { generateSlug } from "@/lib/utils";
 import { ArrowLeft, Plus, Trash2, Save, AlertCircle } from "lucide-react";
 import Link from "next/link";
-import type { Cluster, Minister, PolicyDetail, Milestone } from "@/lib/types";
+import type { Cluster, Minister, PolicyDetail } from "@/lib/types";
+
+interface FormMilestone {
+  name: string;
+  milestone_order: number;
+  weight_percent: number;
+  target_date: string;
+}
 
 export default function EditPolicyPage() {
   const router = useRouter();
   const { id } = router.query;
+  const policyId = Array.isArray(id) ? id[0] : id;
   const [clusters, setClusters] = useState<Cluster[]>([]);
   const [ministers, setMinisters] = useState<Minister[]>([]);
   const [loading, setLoading] = useState(false);
@@ -32,12 +40,12 @@ export default function EditPolicyPage() {
     slug: "",
   });
 
-  const [milestones, setMilestones] = useState<Milestone[]>([]);
+  const [milestones, setMilestones] = useState<FormMilestone[]>([]);
 
   // Load initial data
   useEffect(() => {
     async function loadData() {
-      if (!id) return;
+      if (!policyId) return;
 
       try {
         // Load clusters and ministers
@@ -56,7 +64,7 @@ export default function EditPolicyPage() {
             *,
             milestones (*)
           `)
-          .eq("id", id)
+          .eq("id", policyId)
           .single();
 
         if (policyError) {
@@ -105,7 +113,7 @@ export default function EditPolicyPage() {
     }
 
     loadData();
-  }, [id]);
+  }, [policyId]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -179,7 +187,7 @@ export default function EditPolicyPage() {
     setMilestones(milestones.filter((_, i) => i !== index));
   };
 
-  const updateMilestone = (index: number, field: keyof Milestone, value: any) => {
+  const updateMilestone = (index: number, field: keyof FormMilestone, value: any) => {
     const updated = [...milestones];
     updated[index] = { ...updated[index], [field]: value };
     setMilestones(updated);
