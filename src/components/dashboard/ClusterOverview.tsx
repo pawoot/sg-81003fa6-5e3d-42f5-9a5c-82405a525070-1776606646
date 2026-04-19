@@ -21,17 +21,17 @@ export function ClusterOverview() {
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {clusters.map((cluster) => (
-        <Link
-          key={cluster.id}
-          href={`/clusters/${cluster.id}`}
-          className="group bg-card rounded-lg p-6 shadow-sm border border-border hover:shadow-md transition-all hover:border-primary"
-        >
+      {clusters.map((cluster) =>
+      <Link
+        key={cluster.id}
+        href={`/clusters/${cluster.id}`}
+        className="group bg-card rounded-lg p-6 shadow-sm border border-border hover:shadow-md transition-all hover:border-primary">
+        
           <div className="flex items-start justify-between mb-4">
-            <div 
-              className="text-4xl p-3 rounded-xl transition-transform group-hover:scale-110"
-              style={{ backgroundColor: `${cluster.color_hex}20` }}
-            >
+            <div
+            className="text-4xl p-3 rounded-xl transition-transform group-hover:scale-110"
+            style={{ backgroundColor: `${cluster.color_hex}20` }}>
+            
               {cluster.icon}
             </div>
             <span className="text-sm font-semibold text-muted-foreground">
@@ -39,11 +39,11 @@ export function ClusterOverview() {
             </span>
           </div>
           
-          <h3 className="font-heading font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
+          <h3 className="font-heading font-semibold text-lg mb-2 group-hover:text-primary transition-colors" style={{ color: "#f97316", fontSize: "32px" }}>
             {cluster.short_name}
           </h3>
           
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+          <p className="text-sm text-muted-foreground mb-4 line-clamp-2" style={{ fontSize: "16px" }}>
             {cluster.name}
           </p>
 
@@ -52,7 +52,7 @@ export function ClusterOverview() {
             <ArrowRight className="w-4 h-4" />
           </div>
         </Link>
-      ))}
-    </div>
-  );
+      )}
+    </div>);
+
 }
