@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { getSession, signOut } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   LayoutDashboard, 
   FileText, 
