@@ -27,13 +27,13 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/policies"
-                  className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors">
+                  className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-colors" style={{ backgroundColor: "#f97316", backgroundImage: "none" }}>
                   
                   ดูนโยบายทั้งหมด
                 </Link>
                 <Link
                   href="/about"
-                  className="inline-flex items-center justify-center px-8 py-3 bg-white border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary/5 transition-colors">
+                  className="inline-flex items-center justify-center px-8 py-3 bg-white border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary/5 transition-colors" style={{ color: "#f97316" }}>
                   
                   เกี่ยวกับโครงการ
                 </Link>
@@ -52,7 +52,7 @@ export default function Home() {
         {/* Clusters Overview */}
         <section className="py-16 bg-muted/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-8 text-center">
+            <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-8 text-center" style={{ color: "#f97316", backgroundColor: "#f3f4f6", backgroundImage: "none" }}>
               5 กลุ่มยุทธศาสตร์
             </h2>
             <ClusterOverview />
@@ -62,7 +62,7 @@ export default function Home() {
         {/* Featured Policies */}
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-8 text-center">
+            <h2 className="font-heading font-bold text-3xl md:text-4xl text-foreground mb-8 text-center" style={{ color: "#f97316", backgroundColor: "#f3f4f6", backgroundImage: "none" }}>
               นโยบายด่วนที่ต้องจับตา
             </h2>
             <FeaturedPolicies />
